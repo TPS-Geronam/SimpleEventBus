@@ -17,8 +17,8 @@ The result datapath doesn't exist for non-{sync, async} events. Emitter-Bus-List
 1. implement an event bus and give it some events
 
 ```C#
-[CreateAssetMenu(menuName = "SimpleEventBus/Example/SimpleEventBus", fileName = "MySimpleEventBus.asset")]
-public class MySimpleEventBus : EventBus {
+[CreateAssetMenu(menuName = "SimpleEventBus/Example/EventBus", fileName = "MyEventBus.asset")]
+public class MyEventBus : EventBus {
 	/* C# events */
 	public event Action<string> OnAnonymousEvent;
 	public event Action<EventInfo, string> OnEvent; // listener knows emitter
@@ -46,7 +46,7 @@ public class MySimpleEventBus : EventBus {
 
 ```C#
 public class MyListener : MonoBehaviour, IEventListener {
-	public MySimpleEventBus eventBus;
+	public MyEventBus eventBus;
 	
 	void OnEnable() => eventBus.OnCustomEvent.Subscribe(HandleCustomEvent);
 	void OnDisable() => eventBus.OnCustomEvent.Unsubscribe(HandleCustomEvent);
@@ -61,7 +61,7 @@ public class MyListener : MonoBehaviour, IEventListener {
 ```C#
 [EventEmitterInfo(emitterType: typeof(MyEmitter), withTypeInfo: false)]
 public class MyEmitter : MonoBehaviour, IEventEmitter {
-	public MySimpleEventBus eventBus;
+	public MyEventBus eventBus;
 	EventEmitterInfo emitterInfo;
 	
 	void Awake() {
