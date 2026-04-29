@@ -2,7 +2,7 @@
 
 A simple implementation of an event bus system for Unity3D. A bus is a ScriptableObject, can be instantiated as an .asset inside the project hierarchy and then assigned to listeners and emitters. Listeners can be informed about their callers (emitters). Mainly intended for asynchronous events, listeners that return a value and decoupled non-critical game systems.
 
-Last tested on Unity 6.3
+Last tested on Unity 6.4
 
 <img width="447" height="382" alt="seb" src="https://github.com/user-attachments/assets/14279c8b-ddce-4fc0-8ba5-01059bf0eda3" />
 
