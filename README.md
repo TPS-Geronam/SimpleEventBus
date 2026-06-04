@@ -60,25 +60,25 @@ public class MyListener : MonoBehaviour, IEventListener {
 
 ```C#
 [EventEmitterInfo(emitterType: typeof(MyEmitter), withTypeInfo: false)]
-public class MyEmitter : MonoBehaviour, IEventEmitter {
+public class MyEmitter : MonoBehaviour, IEventEmitter<MyEmitter> {
 	public MyEventBus eventBus;
-	EventEmitterInfo emitterInfo;
+	// this will create and cache the emitter info
+	// cache is inside the EventEmitterInfoFactory
+	EventEmitterInfo EmitterInfo => this.GetEmitterInfo();
 	
 	void Awake() {
-		// you don't have to cache this, the factory will only ever instantiate one info per type
-		emitterInfo = EventEmitterInfoFactory.Create<MySimpleEmitter>();
 		// set the self-ref if you need it
-		emitterInfo.SourceRef = this;
+		EmitterInfo.SourceRef = this;
 		// the cancel token to be passed to Async events
-		emitterInfo.CancellationToken = destroyCancellationToken;
+		EmitterInfo.CancellationToken = destroyCancellationToken;
 	}
 	
 	void work() {
 		// invoke an event directly
-		var eventInfo = new EventInfo(emitterInfo, DateTime.UtcNow);
+		var eventInfo = new EventInfo(EmitterInfo, DateTime.UtcNow);
 		eventBus.OnCustomEvent.Invoke(eventInfo, ("some", "data"));
 		// or implement invocation methods for validation
-		eventBus.InvokeCustomEvent(emitterInfo, ("some", "data"));
+		eventBus.InvokeCustomEvent(EmitterInfo, ("some", "data"));
 		
 		// listeners return all results
 		var results = eventBus.OnSyncEvent.Invoke(eventInfo, ("123"))

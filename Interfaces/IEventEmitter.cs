@@ -1,7 +1,7 @@
 namespace SimpleEventBus
 {
-    public interface IEventEmitter
+    public interface IEventEmitter<T>
     {
-        public EventEmitterInfo GetEventEmitterInfo();
+        public EventEmitterInfo EmitterInfo => EventEmitterInfoFactory.Create<T>();
     }
 }

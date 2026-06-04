@@ -5,20 +5,17 @@ using UnityEngine;
 namespace SimpleEventBus.Example
 {
     [EventEmitterInfo(emitterType: typeof(MySimpleEmitter), withTypeInfo: false)]
-    public class MySimpleEmitter : MonoBehaviour, IEventEmitter
+    public class MySimpleEmitter : MonoBehaviour, IEventEmitter<MySimpleEmitter>
     {
         [SerializeField]
         MySimpleEventBus eventBus;
 
-        EventEmitterInfo emitterInfo;
-        public EventEmitterInfo GetEventEmitterInfo() => emitterInfo;
+        EventEmitterInfo EmitterInfo => this.GetEmitterInfo();
 
         void Awake()
         {
-            // you don't have to cache this, the factory will only ever instantiate one info per type
-            emitterInfo = EventEmitterInfoFactory.Create<MySimpleEmitter>();
-            emitterInfo.SourceRef = this;
-            emitterInfo.CancellationToken = destroyCancellationToken;
+            EmitterInfo.SourceRef = this;
+            EmitterInfo.CancellationToken = destroyCancellationToken;
         }
 
         public void EmitAnonymously()
@@ -28,7 +25,7 @@ namespace SimpleEventBus.Example
 
         public void EmitWithInfo()
         {
-            eventBus.InvokeEvent(emitterInfo, "some simple data (cached attribute)");
+            eventBus.InvokeEvent(EmitterInfo, "some simple data (cached attribute)");
         }
 
         public void EmitWithInterface()
@@ -43,7 +40,7 @@ namespace SimpleEventBus.Example
 
         public void EmitCustom()
         {
-            eventBus.InvokeCustomEvent(emitterInfo, ("some", "data"));
+            eventBus.InvokeCustomEvent(EmitterInfo, ("some", "data"));
         }
 
         public void EmitAnonymouslySync()
@@ -54,13 +51,13 @@ namespace SimpleEventBus.Example
 
         public void EmitSync()
         {
-            var results = eventBus.InvokeSyncEvent(emitterInfo, "123");
+            var results = eventBus.InvokeSyncEvent(EmitterInfo, "123");
             Debug.Log($"[{DateTime.UtcNow.ToLongTimeString()}] MySimpleEmitter received results: {results.ToCommaSeparatedString()}");
         }
 
         public void EmitSyncMultipleReturn()
         {
-            var results = eventBus.InvokeSyncMultipleReturnEvent(emitterInfo, "123");
+            var results = eventBus.InvokeSyncMultipleReturnEvent(EmitterInfo, "123");
             Debug.Log($"[{DateTime.UtcNow.ToLongTimeString()}] MySimpleEmitter received results: {results.ToCommaSeparatedString()}");
         }
 
@@ -68,7 +65,7 @@ namespace SimpleEventBus.Example
 
         async void AwaitAsyncResponses()
         {
-            var task = eventBus.InvokeAsyncEvent(emitterInfo, "123");
+            var task = eventBus.InvokeAsyncEvent(EmitterInfo, "123");
             Debug.Log(".... Simple Emitter doing something before awaiting ....");
             var results = await task;
             Debug.Log($"[{DateTime.UtcNow.ToLongTimeString()}] MySimpleEmitter received results: {results.ToCommaSeparatedString()}");

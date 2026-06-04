@@ -14,7 +14,7 @@ namespace SimpleEventBus.Example
 
         public void InvokeAnonymousEvent(string data) => OnAnonymousEvent?.Invoke(data);
 
-        public void InvokeEvent(IEventEmitter invokingFrom, string data)
+        public void InvokeEvent<T>(IEventEmitter<T> invokingFrom, string data)
         {
             var eventInfo = GetEventInfo(invokingFrom, DateTime.UtcNow);
             OnEvent?.Invoke(eventInfo, data);
