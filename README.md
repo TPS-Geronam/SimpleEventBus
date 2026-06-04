@@ -65,8 +65,9 @@ public class MyEmitter : MonoBehaviour, IEventEmitter {
 	EventEmitterInfo emitterInfo;
 	
 	void Awake() {
-		/// you don't have to cache this, the factory will only ever instantiate one info per type
+		// you don't have to cache this, the factory will only ever instantiate one info per type
 		emitterInfo = EventEmitterInfoFactory.Create<MySimpleEmitter>();
+		// set the self-ref if you need it
 		emitterInfo.SourceRef = this;
 		// the cancel token to be passed to Async events
 		emitterInfo.CancellationToken = destroyCancellationToken;
