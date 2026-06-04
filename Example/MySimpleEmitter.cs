@@ -1,5 +1,4 @@
 using System;
-using System.Reflection;
 using Unity.VisualScripting;
 using UnityEngine;
 
@@ -16,9 +15,8 @@ namespace SimpleEventBus.Example
 
         void Awake()
         {
-            // cache attribute to avoid reflection in the bus
-            emitterInfo = (EventEmitterInfo)typeof(MySimpleEmitter)
-                .GetCustomAttribute(typeof(EventEmitterInfo));
+            // you don't have to cache this, the factory will only ever instantiate one info per type
+            emitterInfo = EventEmitterInfoFactory.Create<MySimpleEmitter>();
             emitterInfo.SourceRef = this;
             emitterInfo.CancellationToken = destroyCancellationToken;
         }
