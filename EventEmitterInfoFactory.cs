@@ -15,7 +15,7 @@ namespace SimpleEventBus
 			if (_emitters.TryGetValue(type, out var emitterInfo))
 				return emitterInfo;
 
-			emitterInfo = (EventEmitterInfo)type.GetCustomAttribute(typeof(EventEmitterInfo));
+			emitterInfo = type.GetCustomAttribute<EventEmitterInfo>();
 			if (cache)
 				_emitters.Add(type, emitterInfo);
 
